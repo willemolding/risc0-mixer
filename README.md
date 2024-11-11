@@ -7,7 +7,6 @@ A tornado-cash style coin mixer implemented using RISC Zero
 Implements a protocol very similar to the original Tornado-cash with the following changes:
 
 - Uses sha256 hashing for the nullifier and commitment tree instead of Pederson and MiMC hashes
-  - Sha256 is cheaper in RISC Zero and cheaper on-chain
 - Removes the withdrawal fee functionality. Mostly to keep the demo simple.
 
 Why rewrite tornado cash with RISC Zero? Aside from being a nice example it opens up the possibility to compose additional proofs with the withdrawal proofs. For example it would be straightforward to add compliance checking to ensure that the withdrawer is a member of a whitelisted set without linking this identity to their account.
@@ -18,7 +17,7 @@ The protocol works as follows:
 
 The depositor generates a nullifier, $k$, and secret value, $r$, locally. These are hashed together to produce a note commitment
 
-$C = H(k||r)$.
+$C = H(k || r)$.
 
 This is submitted to the contract along with a pre-determined amount of eth (this example uses 1 Eth sized notes). The tuple ($k$, $r$) makes up the spending key for this note.
 
@@ -31,10 +30,12 @@ To spend the withdrawer needs to construct a proof with the following form:
 > I know $k$, $r$, $l$, $O(l)$
 > such that:
 >
-> - $h = H(k)
-> - O(l) is a valid merkle proof for leaf $C = H(k||r)$ rooted at $R$
+> - $h = H(k)$
+> - O(l) is a valid merkle proof for leaf $C = H(k || r)$ rooted at $R$
 
-where $l$ is the leaf position of the note commitment they are attempting to spend, and $h$ is the nullifier hash. In this case $h$ and $R$ are the public inputs and $k$, $r$, $l$, and $O(l)$ are private inputs. The proof also needs to commit to the receiving address $A$ so that the withdrawal transaction is non-malleable.
+where $l$ is the leaf position of the note commitment they are attempting to spend and $h$ is the nullifier hash.
+
+In this case $h$ and $R$ are the public inputs and $k$, $r$, $l$, and $O(l)$ are private inputs. The proof also needs to commit to the receiving address $A$ so that the withdrawal transaction is non-malleable.
 
 To construct a valid merkle proof the withdrawer has to reconstruct the contract merkle tree locally. It does this by querying an RPC node for all deposit events and builds a tree locally with extracted the note commitments.
 
@@ -53,24 +54,28 @@ The contract verifies this proof, checks that the nullifier hash, tree root and 
 │       └── precompute_zero_nodes.rs // Utility to populate the precomputed zero notes in the merkle tree contract
 │       └── bin
 │           └── client/             // App to interact with the mixer. This performs the secret generation and proving and interacts with the contracts
+│
 ├── core                            // Crate with common functionality between the client and the guest program
 │   ├── Cargo.toml
 │   └── src
 │       └── lib.rs                  // exports the `ProofInput` type and encoding helpers
+│
 ├── contracts
 │   ├── Mixer.sol                   // Mixer implementation, this checks the proofs and stores the merkle tree and nullifiers
 │   ├── EthMixer.sol                // Mixer impl specific to using Eth (rather than an erc20 token)
 │   ├── MerkleTreeWithHistory.sol   // Incremental merkle tree implementation. Modified to use sha2
 │   └── ImageID.sol                 // Generated contract with the image ID for your zkVM program
+│
 ├── methods
 │   ├── Cargo.toml
 │   ├── guest
 │   │   ├── Cargo.toml
 │   │   └── src
 │   │       └── bin
-│   │           └── can_spend.rs      // Guest program for doing a note spend check
+│   │           └── can_spend.rs      // Guest program for performing a note spend check
 │   └── src
 │       └── lib.rs                  // Compiled image IDs and tests for the guest program
+│
 └── tests
     └── MerkleTree.t.sol            // Tests ensuring compatibility between on-chain and off-chain merkle tree
 ```
