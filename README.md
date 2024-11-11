@@ -44,7 +44,7 @@ The contract verifies this proof, checks that the nullifier hash, tree root and 
 ## Repo Contents
 
 > [!NOTE]
-> The contracts `Mixer.sol`, `EthMixer.sol` and `MerkleTreeWithHistory.sol` are modified versions of the [original Tornado cash contracts](https://github.com/tornadocash/tornado-core/tree/master/contracts) and should not be considered original code for this submission.
+> The contracts `Mixer.sol`, `EthMixer.sol` and `MerkleTreeWithHistory.sol` are modified versions of the [original Tornado cash contracts](https://github.com/tornadocash/tornado-core/tree/master/contracts) and should not be considered original code for this submission. The main modification is the [integration of the RISC Zero verifier](https://github.com/willemolding/simple-mixer/blob/1ed2a590760bedc95f434e9a6636bd89c414f880/contracts/Mixer.sol#L76).
 
 ```
 .
