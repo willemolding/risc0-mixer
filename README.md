@@ -79,6 +79,8 @@ The contract verifies this proof, checks that the nullifier hash, tree root and 
     └── MerkleTree.t.sol            // Tests ensuring compatibility between on-chain and off-chain merkle tree
 ```
 
+Getting this to work also required some modifications to the incremental merkle tree crate to make it generic over the hash function and to allow verifying proofs without reconstructing the whole tree. See [the diff](https://github.com/rkdud007/alloy-merkle-tree/compare/main...willemolding:alloy-merkle-tree:main).
+
 ## Running the Demo!
 
 First, install Rust and Foundry, and then restart your terminal.
