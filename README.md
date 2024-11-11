@@ -52,11 +52,11 @@ The contract verifies this proof, checks that the nullifier hash, tree root and 
 │   ├── Cargo.toml
 │   ├── src
 │   └── bin
-│       └── client                // CLI client for interacting with the mixer
-│           ├── abi.rs            // defines ABI types used when interacting with the chain
-│           ├── deposit.rs        // deposit logic (spending key generation, tx submission)
-│           ├── main.rs           // CLI entry point and arg parsing
-│           └── withdraw.rs       // withdrawal logic (merkle tree reconstruction, proof generation, tx submission)
+│       └── client                  // CLI client for interacting with the mixer
+│           ├── abi.rs              // defines ABI types used when interacting with the chain
+│           ├── deposit.rs          // deposit logic (spending key generation, tx submission)
+│           ├── main.rs             // CLI entry point and arg parsing
+│           └── withdraw.rs         // withdrawal logic (merkle tree reconstruction, proof generation, tx submission)
 ├── core                            // Crate with common functionality between the client and the guest program
 │   ├── Cargo.toml
 │   └── src
@@ -72,11 +72,12 @@ The contract verifies this proof, checks that the nullifier hash, tree root and 
 │   │   ├── Cargo.toml
 │   │   └── src
 │   │       └── bin
-│   │           └── can_spend.rs      // Guest program for performing a note spend check
+│   │           └── can_spend.rs     // Guest program for performing a note spend check
 │   └── src
-│       └── lib.rs                  // Compiled image IDs and tests for the guest program
-└── tests
-    └── MerkleTree.t.sol            // Tests ensuring compatibility between on-chain and off-chain merkle tree
+│       └── lib.rs                   // Compiled image IDs and tests for the guest program
+├── tests
+│    └── MerkleTree.t.sol            // Tests ensuring compatibility between on-chain and off-chain merkle tree
+└── justfile                          // commands for the repo (similar to a makefile)
 ```
 
 Getting this to work also required some modifications to the incremental merkle tree crate to make it generic over the hash function and to allow verifying proofs without reconstructing the whole tree. See [the diff](https://github.com/rkdud007/alloy-merkle-tree/compare/main...willemolding:alloy-merkle-tree:main).

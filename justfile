@@ -11,4 +11,4 @@ deposit:
     RUST_LOG_LEVEL=info cargo run --bin client -- deposit
 
 @withdraw spending_key:
-    cargo run --bin client -- withdraw $1
+    RUST_LOG_LEVEL=info cargo run --bin client -- withdraw $1
