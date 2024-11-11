@@ -1,4 +1,4 @@
-# Simple Mixer
+# Simple Mixer 💸♻️💸
 
 A tornado-cash style coin mixer implemented using RISC Zero
 
@@ -50,22 +50,22 @@ The contract verifies this proof, checks that the nullifier hash, tree root and 
 .
 ├── apps
 │   ├── Cargo.toml
-│   └── src
-│       └── precompute_zero_nodes.rs // Utility to populate the precomputed zero notes in the merkle tree contract
-│       └── bin
-│           └── client/             // App to interact with the mixer. This performs the secret generation and proving and interacts with the contracts
-│
+│   ├── src
+│   └── bin
+│       └── client                // CLI client for interacting with the mixer
+│           ├── abi.rs            // defines ABI types used when interacting with the chain
+│           ├── deposit.rs        // deposit logic (spending key generation, tx submission)
+│           ├── main.rs           // CLI entry point and arg parsing
+│           └── withdraw.rs       // withdrawal logic (merkle tree reconstruction, proof generation, tx submission)
 ├── core                            // Crate with common functionality between the client and the guest program
 │   ├── Cargo.toml
 │   └── src
 │       └── lib.rs                  // exports the `ProofInput` type and encoding helpers
-│
 ├── contracts
 │   ├── Mixer.sol                   // Mixer implementation, this checks the proofs and stores the merkle tree and nullifiers
 │   ├── EthMixer.sol                // Mixer impl specific to using Eth (rather than an erc20 token)
 │   ├── MerkleTreeWithHistory.sol   // Incremental merkle tree implementation. Modified to use sha2
 │   └── ImageID.sol                 // Generated contract with the image ID for your zkVM program
-│
 ├── methods
 │   ├── Cargo.toml
 │   ├── guest
@@ -75,14 +75,13 @@ The contract verifies this proof, checks that the nullifier hash, tree root and 
 │   │           └── can_spend.rs      // Guest program for performing a note spend check
 │   └── src
 │       └── lib.rs                  // Compiled image IDs and tests for the guest program
-│
 └── tests
     └── MerkleTree.t.sol            // Tests ensuring compatibility between on-chain and off-chain merkle tree
 ```
 
 ## Running the Demo!
 
-First, [install Rust] and [Foundry], and then restart your terminal.
+First, install Rust and Foundry, and then restart your terminal.
 
 ```sh
 # Install Rust
@@ -131,7 +130,7 @@ cargo install just
 The easiest way to demo the mixer is using a local anvil devnet. Start an anvil instance and keep it running:
 
 ```sh
-anvil
+just start-devnet
 ```
 
 ---

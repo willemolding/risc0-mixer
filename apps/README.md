@@ -1,46 +1,48 @@
 # Apps
 
-In typical applications, an off-chain app is needed to do two main actions:
+Off-chain apps to interact with the mixer
 
-* Produce a proof e.g. by sending a proof request to [Bonsai].
-* Send a transaction to Ethereum to execute your on-chain logic.
+## client
 
-This template provides the `publisher` CLI as an example application to execute these steps.
-In a production application, a back-end server or your dApp client may take on this role.
+The [`client` CLI][client], is the primary way to interact with the mixer. It has two commands `deposit` and `withdraw` which work as expected. Most of the args can be loaded from env vars.
 
-## Publisher
+`deposit` produces a spending key which is written to std-out.
 
-The [`publisher` CLI][publisher], is an example application that sends an off-chain proof request to the [Bonsai] proving service, and publishes the received proofs to your deployed app contract.
+`withdraw` requires a single positional argument <SPENDING_KEY> which is the hex encoded spending key produced by a call to deposit.
 
 ### Usage
 
-Run the `publisher` with:
+Run the `client` with:
 
 ```sh
-cargo run --bin publisher
+cargo run --bin client
 ```
 
 ```text
-$ cargo run --bin publisher -- --help
+$ cargo run --bin client -- --help
 
-Usage: publisher --chain-id <CHAIN_ID> --eth-wallet-private-key <ETH_WALLET_PRIVATE_KEY> --rpc-url <RPC_URL> --contract <CONTRACT> --input <INPUT>
+Usage: client [OPTIONS] --chain-id <CHAIN_ID> --eth-wallet-private-key <ETH_WALLET_PRIVATE_KEY> --rpc-url <RPC_URL> --contract <CONTRACT> <COMMAND>
+
+Commands:
+  deposit   Deposit N eth into the contract and generate the withdrawal key
+  withdraw  Withdraw N eth from the contract using the withdrawal key
+  help      Print this message or the help of the given subcommand(s)
 
 Options:
       --chain-id <CHAIN_ID>
-          Ethereum chain ID
+          Ethereum chain ID [env: CHAIN_ID=]
       --eth-wallet-private-key <ETH_WALLET_PRIVATE_KEY>
-          Ethereum Node endpoint [env: ETH_WALLET_PRIVATE_KEY=]
+          Ethereum wallet private key [env: ETH_WALLET_PRIVATE_KEY=]
       --rpc-url <RPC_URL>
-          Ethereum Node endpoint
+          Ethereum Node endpoint [env: RPC_URL=]
       --contract <CONTRACT>
-          Application's contract address on Ethereum
-  -i, --input <INPUT>
-          The input to provide to the guest binary
+          Application's contract address on Ethereum [env: CONTRACT=]
+      --contract-deploy-height <CONTRACT_DEPLOY_HEIGHT>
+          The height at which the contract was deployed [default: 0]
+      --note-size <NOTE_SIZE>
+          The note size, N, used by this contract in wei [default: 1000000000000000000]
   -h, --help
           Print help
   -V, --version
           Print version
 ```
-
-[publisher]: ./src/bin/publisher.rs
-[Bonsai]: https://dev.bonsai.xyz/

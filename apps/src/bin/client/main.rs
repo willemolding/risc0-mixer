@@ -1,5 +1,3 @@
-// Copyright 2024 RISC Zero, Inc.
-//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -26,7 +24,7 @@ mod abi;
 mod deposit;
 mod withdraw;
 
-/// Arguments of the publisher CLI.
+/// Interact with a deployed mixer contract
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
@@ -34,7 +32,7 @@ struct Args {
     #[clap(long, env)]
     chain_id: u64,
 
-    /// Ethereum Node endpoint.
+    /// Ethereum wallet private key.
     #[clap(long, env)]
     eth_wallet_private_key: PrivateKeySigner,
 
