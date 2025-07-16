@@ -10,7 +10,7 @@ use anyhow::Result;
 use methods::CAN_SPEND_ELF;
 use mvm_core::ProofInput;
 use risc0_ethereum_contracts::encode_seal;
-use risc0_zkvm::{ExecutorEnv, ProverOpts, VerifierContext, default_prover};
+use risc0_zkvm::{ExecutorEnv, ProverOpts, default_prover};
 use sha2::{Digest, Sha256};
 
 use crate::abi::Deposit;
@@ -75,12 +75,7 @@ where
     // by default which won't work in an async context.
     // Should add a feature flag to risc0_zkvm to enable the non_blocking version
     let receipt = tokio::task::block_in_place(|| {
-        default_prover().prove_with_ctx(
-            env,
-            &VerifierContext::default(),
-            CAN_SPEND_ELF,
-            &ProverOpts::groth16(),
-        )
+        default_prover().prove_with_opts(env, CAN_SPEND_ELF, &ProverOpts::groth16())
     })?
     .receipt;
 
