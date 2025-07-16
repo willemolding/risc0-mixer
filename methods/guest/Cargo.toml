@@ -10,14 +10,14 @@ path = "src/bin/can_spend.rs"
 [workspace]
 
 [dependencies]
-alloy-primitives = { version = "=0.8.11", default-features = false, features = [
+alloy-primitives = { version = "1.2", default-features = false, features = [
     "rlp",
     "serde",
     "std",
 ] }
-alloy-merkle-tree = { git = "https://github.com/willemolding/alloy-merkle-tree", rev = "9d1f05d4dcd" }
-alloy-sol-types = { version = "=0.8.11" }
-risc0-zkvm = { version = "1.1", default-features = false, features = ['std'] }
+alloy-merkle-tree = { git = "https://github.com/willemolding/alloy-merkle-tree", rev = "a62adb8" }
+alloy-sol-types = { version = "1.2" }
+risc0-zkvm = { version = "2.3.0", default-features = false, features = ['std'] }
 mvm-core = { path = "../../core" }
 sha2 = "0.10.6"
 
