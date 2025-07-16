@@ -22,7 +22,7 @@ mod tests {
     use mvm_core::ProofInput;
     use num_bigint::RandBigInt;
     use rand::Rng;
-    use risc0_zkvm::{default_executor, ExecutorEnv, ExitCode};
+    use risc0_zkvm::{ExecutorEnv, ExitCode, default_executor};
     use sha2::{Digest, Sha256};
 
     type MerkleTree = IncrementalMerkleTree<10, Sha256>;
@@ -52,7 +52,7 @@ mod tests {
 
         // insert some other random values into the merkle tree to pad
         for _ in 0..l {
-            let value = rng.gen::<[u8; 32]>();
+            let value = rng.r#gen::<[u8; 32]>();
             tree.append(value.into()).expect("failed to append to tree");
         }
 

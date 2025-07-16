@@ -10,7 +10,7 @@ use anyhow::Result;
 use methods::CAN_SPEND_ELF;
 use mvm_core::ProofInput;
 use risc0_ethereum_contracts::encode_seal;
-use risc0_zkvm::{default_prover, ExecutorEnv, ProverOpts, VerifierContext};
+use risc0_zkvm::{ExecutorEnv, ProverOpts, VerifierContext, default_prover};
 use sha2::{Digest, Sha256};
 
 use crate::abi::Deposit;
@@ -18,15 +18,14 @@ use crate::abi::IMixer::IMixerInstance;
 
 type MerkleTree = IncrementalMerkleTree<10, Sha256>;
 
-pub(crate) async fn withdraw<T, P, N>(
-    contract: &IMixerInstance<T, P, N>,
+pub(crate) async fn withdraw<P, N>(
+    contract: &IMixerInstance<P, N>,
     contract_deploy_height: u64,
     recipient: Address,
     note_spending_key: [u8; 64],
 ) -> Result<()>
 where
-    T: alloy::transports::Transport + Clone,
-    P: Provider<T, N>,
+    P: Provider<N>,
     N: Network,
 {
     let commitment = {
@@ -109,14 +108,13 @@ where
 
 /// Parse the deposit logs in the contract to reconstruct the commitment Merkle tree locally
 /// Also return the index of the given spending commitment in the tree if it is found
-pub(crate) async fn fetch_tree_and_commitment_position<T, P, N>(
-    contract: &IMixerInstance<T, P, N>,
+pub(crate) async fn fetch_tree_and_commitment_position<P, N>(
+    contract: &IMixerInstance<P, N>,
     contract_deploy_height: u64,
     spending_commitment: [u8; 32],
 ) -> Result<(MerkleTree, Option<u32>)>
 where
-    T: alloy::transports::Transport + Clone,
-    P: Provider<T, N>,
+    P: Provider<N>,
     N: Network,
 {
     // log filter for deposit events
@@ -131,7 +129,7 @@ where
     let mut spending_commitment_index = None;
 
     for log in logs {
-        let log = Deposit::decode_log(&log.inner, true)?;
+        let log = Deposit::decode_log(&log.inner)?;
         commitment_tree
             .append(log.commitment)
             .map_err(|_| anyhow::anyhow!("failed to append to tree"))?;

@@ -10,13 +10,9 @@ use num_bigint::RandBigInt;
 use rand::rngs::OsRng;
 use sha2::{Digest, Sha256};
 
-pub(crate) async fn deposit<T, P, N>(
-    contract: &IMixerInstance<T, P, N>,
-    note_size: U256,
-) -> Result<()>
+pub(crate) async fn deposit<P, N>(contract: &IMixerInstance<P, N>, note_size: U256) -> Result<()>
 where
-    T: alloy::transports::Transport + Clone,
-    P: Provider<T, N>,
+    P: Provider<N>,
     N: Network,
 {
     // generate the nullifier (k) and secret (r) that make up the spending key
