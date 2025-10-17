@@ -17,7 +17,7 @@ alloy-primitives = { version = "1.2", default-features = false, features = [
 ] }
 alloy-merkle-tree = { git = "https://github.com/willemolding/alloy-merkle-tree", rev = "a62adb8" }
 alloy-sol-types = { version = "1.2" }
-risc0-zkvm = { version = "2.3.0", default-features = false, features = ['std'] }
+risc0-zkvm = { version = "3.0.3", default-features = false, features = ['std'] }
 mvm-core = { path = "../../core" }
 sha2 = "0.10.6"
 

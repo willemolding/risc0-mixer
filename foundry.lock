@@ -1,0 +1,14 @@
+{
+  "lib/forge-std": {
+    "rev": "60acb7aaadcce2d68e52986a0a66fe79f07d138f"
+  },
+  "lib/openzeppelin-contracts": {
+    "rev": "101bbaf1a8e02f95392380586ba0fc5752c4204d"
+  },
+  "lib/risc0-ethereum": {
+    "tag": {
+      "name": "v3.0.0",
+      "rev": "32aa0b6f23ddd02dd93fc71717667606e5c7db86"
+    }
+  }
+}
